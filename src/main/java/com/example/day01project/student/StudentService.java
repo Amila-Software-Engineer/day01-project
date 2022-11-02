@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -22,8 +23,23 @@ public class StudentService {
         return studentRepository.findAll();
     }
     public void addNewStudent(Student student){
-       studentRepository.save(student);
+        Optional<Student> studentbyemail = studentRepository.findStudentByEmail(student.getEmail());
+        if(studentbyemail.isPresent()){
+            throw new IllegalStateException("Email is already exists.");
+        }
+        studentRepository.save(student);
     }
 
+    public void deleteStudent(Long id){
+        boolean exists = studentRepository.existsById(id);
+        if(!exists){
+            throw new IllegalStateException("Student with id  "+id+"  Does not exists.");
+        }
+        studentRepository.deleteById(id);
+    }
+
+    public void updateStudent(Long id, String name,String email){
+        studentRepository.
+    }
 
 }
